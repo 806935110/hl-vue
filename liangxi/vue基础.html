@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="../js/vue.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
+</head>
+<body>
+	<div id="app" v-bind:title = "message" v-if="see" v-on:click="handle" >
+		{{mm}}
+		<input type="text" v-model="state" placeholder="请输入你的问题" @keyup.Enter="handlebian">
+		
+		<p v-html="span"></p>
+		<i>{{state}}</i>
+
+		{{firstName}} {{lastName}}
+		<input type="text" v-model="firstName">
+         <input type="text" v-model="lastName">
+         <input type="text" v-model="fullName">
+
+         <input type="text" v-model="question" placeholder="请输入你的问题">
+         <br>
+         你问题的答案是： {{answer}}
+	</div>
+	
+
+	<ol id="app1">
+		<li  v-for="todo in todos">
+				{{todo.text}}
+		</li>
+		
+	</ol>
+		
+
+	<div id="app-4">
+	  <ol>
+	    <li v-for="todo in todos">
+	      {{ todo.text }}
+	    </li>
+	  </ol>
+	</div> 
+
+	<!-- <ul>
+			<todo-item></todo-item>
+	</ul> -->
+		
+</body>
+	<script type="text/javascript">
+		var app = new Vue({
+			el:'#app',
+			data:{
+				mm:"123456789",
+				message:'页面加载于 ' + new Date().toLocaleString(),
+				see:true,
+				state:"",
+				span:`<span>哈哈哈哈哈哈哈</span>`,
+				answer:'请输入111查询！',
+				firstName:'h',
+				lastName:'l',
+				question:''
+			},
+			watch:{
+				lastName(val){
+					if(val=='sb'){
+						console.error("你才是sb吧！")
+						this.firstName="鬼鬼"
+					}
+				},
+				question(val){
+					this.answer = "输入中...";
+					var that=this;
+				
+					(_.debounce(function(){
+						if(val.indexOf("111")==-1){
+							that.answer="输入111查询！"
+							return
+						}
+						that.answer = "请求数据中..."
+
+						setTimeout(function(){
+                    
+		                    that.answer = `问题是,${val}！答案:呵呵,这都信...`
+
+		                },1000)
+					},600))()
+				}
+			},
+			computed:{
+				fullName:{
+					get(){
+						return this.firstName+''+this.lastName
+					},
+					set(val){//修改过后的新值
+						console.log(val)
+		                 var names = val.split(' ');
+		                 this.firstName = names[0];
+		                 this.lastName = names[1];
+		           	  }
+				}
+			},
+			methods:{
+				handle(){
+					this.see=true
+					this.mm="你好"
+				},
+				handlebian(){
+					console.log(this.state)
+				}
+			}
+			
+		})
+		 var app4 = new Vue({
+		  el: '#app-4', //v-for 遍历一个数据
+		  data: {
+		    todos: [
+		      { text: '学习 JavaScript' },
+		      { text: '学习 Vue' },
+		      { text: '整个牛项目' }
+		    ]
+		  }
+		})
+		 var app1 = new Vue({
+		 	el:"#app1",
+		 	data:{
+		 		todos:[
+		 			{text:123},
+		 			{text:456},
+		 			{text:789}
+		 		]
+		 	}
+		 
+		 })
+		// Vue.component('todo-item', { //定义全局组件
+		//   template:'<p>这是个待办项</p>'
+		// })
+	</script>
+</html>

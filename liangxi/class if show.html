@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="../js/vue.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
+</head>
+<body>
+	<div :class="[big,'bb']" class="hos">你好！
+		<p :class="{box:box}" :style="{color:red}">发那师傅那是你是否能是否能舒服服</p>
+		<p :style="[ys]">纷纷为非法纷纷往返额</p>
+
+		<template v-if="abc==='guizi'">
+			<h2>鬼子</h2>
+			<p>是sb</p>
+		</template >
+		<template v-else="abc==='yangyu'">
+			<h2>洋芋</h2>
+			<p>洋芋头</p>
+		</template>
+		<button @click="qiehuan">切换</button>
+
+<hr/>
+
+		 <button @click="handleClick('add',$event)">+</button>
+          <button @click="handleClick('sub',$event)">-</button>
+
+          <button @click.stop.once="count+=1">{{count}}</button>
+	</div>
+		
+</body>
+	<script type="text/javascript">
+		var app = new Vue({
+			el:".hos",
+			data:{
+				box:true,
+				big:"cc",
+				red:"red",
+				ys:{
+					fontSize:"50px",
+					color:"blue"
+				},
+				abc:"guizi",
+				count:0
+			},
+			methods:{
+				qiehuan(){
+					this.abc=this.abc=="guizi"?"":"guizi"
+				},
+				handleClick(type,event){
+					console.log(type=='add')
+					if(type=='add'){
+						this.count++
+						console.log(type)
+					}else{
+						this.count--
+					}
+					
+				}
+			}
+		})
+	</script>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="../js/vue.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
+
+	<style type="text/css">
+		.hi-enter-active{
+			animation: hi-hi 1s;
+		}
+		.hi-leave-active{
+			animation:hi-hi 1s reverse;
+		}
+		@keyframes hi-hi{
+			0%{
+				opacity:0;
+			}
+			50%{
+				opacity:0.5;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div id=app>
+		<my-hl1>
+		
+		</my-hl1>
+		<hr/>
+		{{msg}}
+		<my-hl>
+			<div slot="header">我在上面！</div>
+			<div slot="footer">你在下面！</div>
+			
+
+		</my-hl>
+		
+		
+<hr/>
+
+
+
+		<my-input ph="输入用户名" type="text" :value="username" @input="username=arguments[0]"></my-input>
+		<my-input ph="输入用户名" type="text" v-model="username"></my-input>
+
+		<my-input ph="密码" type="password"></my-input>
+		{{username}}
+
+
+<hr/>
+		<button @click="bianhua" >茄瓜</button>
+		<transition name="hi" mode=out-in>
+			<div v-if="show" key="save">看我厉害不！</div>
+			<div v-else key="edit">那你来吧！</div>
+		</transition>
+			
+		
+	</div>
+	
+</body>
+	<script type="text/javascript">
+
+		Vue.filter('up',function(val){
+          //处理数据
+          return val.charAt(0).toUpperCase()+val.slice(1)
+    })
+		var bus = new Vue()//兄弟组件通信的中间桥梁
+		Vue.component("my-hl",{
+			data(){
+				return{
+					content:0,
+					ni:"你好！",
+					hlhl:"nihaoma"
+				}
+			},
+			template:`<div>你好！{{content}}  {{hlhl | up}}
+						<slot name="header"></slot>
+						<button @click="handleclick">++</button>
+						<slot name="footer"></slot> 
+						<div>gdsgsdgsdgsdfgsdgsd</div>
+						<button @click="handlegive">give</button></div>
+						`,
+			methods:{
+				handleclick(){
+					console.log(this.ni)
+					this.content++
+				},
+				handlegive(){
+					bus.$on('give',function(sss){
+					console.log(sss)
+				})
+				}
+				
+			},
+			 mounted(){
+			 	bus.$emit('give',this.content)
+			 	console.log(1)
+			// 	bus.$on('give',function(sss){
+			// 	console.log(sss)
+			// })
+			 },
+			 filters:{//局部注册过滤器
+
+			}
+
+		});
+		var myhl2={
+			props:{
+				cc:{
+					type:[Number,String],
+					// default:99,
+					required:true,
+					validator(cc){
+						if(cc<99){
+							console.error("cc值不能小于99")
+							return false
+						}
+						return true
+					}
+				}
+			},
+			template:`<input @change="handleGet"/>`,
+			methods:{
+				handleGet(e){
+					this.$emit('onGet',e.target.value);
+				}
+			}
+		}
+		var myinput={
+			props:{
+				type:{
+					type:String,
+					required:true
+				},
+				value:[String,Number],
+				ph:String
+			},
+			template:`
+			<div className="input_lable">
+					<input :type='type' :value='value' :placeholder='ph' @input="handleinput"/>
+			</div>
+			`,
+			methods:{
+				handleinput(e){
+					this.$emit('input',e.target.value)
+				}
+			}
+		}
+
+
+		var myhl={
+			data(){
+				return{
+					cc:100,
+					type:'text',
+					value:'',
+					placeholder:''
+				}
+			},
+			template:`<div>
+						人生如戏！
+						<my-hl2 :cc="cc" @onGet="handleGets"></my-hl2>{{cc}}
+						<button @click="handlec('add',$event)">++</button>
+						<button @click="handlec('sub',$event)">--</button>
+					</div>`,
+			components:{
+				'my-hl2':myhl2
+			},
+			mounted(){
+				console.log(2)
+				 // bus.$emit('give',this.cc)
+				bus.$on('give',function(sss){
+					console.log(sss)
+				})
+			},
+			methods:{
+				// handlegive(){
+				// 	// bus.$emit('give',this.cc)
+				// 	bus.$on('give',function(sss){
+				// 	console.log(sss)
+				// })
+				// },
+				handleGets(val){
+					this.cc=val
+				},
+				handlec(type,e){
+					console.log(type,e.target)
+					if(type=='add'){
+						this.cc++
+					}else{
+						this.cc--
+					}
+				}
+			}
+		}
+		
+		var app=new Vue({
+			el:"#app",
+			data:{
+				msg:"大家好！",
+				username:"hl",
+				show:true
+			},
+			components:{
+				'my-hl1':myhl,
+				'my-input':myinput
+				
+			},
+			methods:{
+				bianhua(){
+					this.show=!this.show
+				}
+			},
+			
+			
+		})
+
+	</script>
+</html>

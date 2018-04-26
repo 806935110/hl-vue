@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, user-scalable=no" />
+	<title>Document</title>
+	<link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
+	<script src="../js/vue.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
+	<style>
+         *{
+			   	margin: 0;padding:0;
+			   }
+			  ul,li{
+			  	list-style: none
+			  }
+			  .div1{
+			  	background-color: red
+			  }
+			  .div2{
+			  		background-color: yellow
+			  }
+			  .div3{
+			  		background-color: pink
+			  }
+              p{position: absolute;}
+           .footer{
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				height: 49px;
+				width: 100%;
+				display: flex;
+			}
+			.footer li{
+				flex: 1;
+				height: 100%;
+				box-sizing: border-box;
+				border: 1px solid #ddd;
+				text-decoration: none;
+				color: #000;
+				text-align: center;
+				line-height: 49px;
+			}
+			.active{
+				background: red!important
+			}
+       		/*.fade-enter-active,.fade-leave-active{
+					transition:all 0.5s
+       		}
+       		.fade-enter,.fade-leave-to{
+       			transform:translateX(20px);
+       			opacity:0;
+
+       		}*/
+       		.fade-enter-active{
+       			animation:fade-in 1s;
+       		}
+       		.fade-leave-action{
+       			animation:fade-in 1s reverse;
+       		}
+       		@keyframes fade-in{
+       			0%{
+       				opacity:0;
+       				transform:scale(0.75);
+       			}
+       			25%{
+       				opacity:0.25;
+       			}
+       			50%{
+       				opacity: 0.5;
+       			}
+       			75%{
+       				opacity: 0.75;
+       				transform:scale(0);
+       			}
+
+       		}
+    </style>
+</head>
+<body>
+	<div id=app>
+		
+		<div>
+			<keep-alive>
+				<transition name="fade" mode="out-in">
+			  		 <component :is="current"></component>
+			  	</transition>
+		    </keep-alive>
+		</div>
+
+		<div>
+			<ul  class="footer" >
+				<li :class="{active:index==idx}" v-for="(item,idx) in list" @click="handlelist(item,idx)">
+					{{item}}
+				</li>
+			</ul>
+		</div>
+
+	
+
+	<div id="example-3">
+		  <button @click="show = !show">
+		    Toggle render
+		  </button>
+		  <transition
+		    name="custom-classes-transition"
+		    enter-active-class="animated tada"
+		    leave-active-class="animated bounceOutRight"
+		  >
+		    <p v-if="show">hello</p>
+		  </transition>
+		</div>
+			</div>
+			
+</body>
+	<script type="text/javascript">
+		var Index = {
+			data(){
+				return{
+					hi:0
+				}
+			},
+			template:`<div style="color:green">
+						我是首页！{{hi}}
+						<button>sb</button>
+					</div>`
+		}
+		var Contact = {
+			template:`<div style="color:red">我是联系人！</div>`
+		}
+		var User={
+			template:`<div style="color:orange">我是我自己！</div>`
+		}
+
+		var app=new Vue({
+			el:"#app",
+			data:{
+				current:'user',
+				list:['user','contact','index'],
+				index:0,
+				show:true
+			},
+			components:{
+	        	user:User,
+	        	contact:Contact,
+	        	index:Index
+	        },
+	        methods:{
+	        	handlelist(item,idx){
+	        		// console.log(item)
+	        		this.current=item
+	        		this.index=idx
+	        	}
+	        }
+		})
+
+	</script>
+</html>

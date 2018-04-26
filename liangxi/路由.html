@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, user-scalable=no" />
+	<title>Document</title>
+	<link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
+	<script src="../js/vue.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
+	<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+	<style>
+        .fade-enter-active,.fade-leave-active{
+        	transition: all 1s;
+        }
+        .fade-enter,.fade-leave-to{
+        	opacity:0;
+        }
+		.fad-enter-active{
+			animation:fad-in 1s;
+		}
+		.fad-leave-active{
+			animation:fad-in 1s reverse;
+		}
+		@keyframes fad-in{
+			0%{
+				opacity: 0;
+			}
+			50%{
+				opacity: 0.5;
+			}
+		}
+    </style>
+</head>
+<body>
+	<div id=app>
+		<!-- 使用 router-link 组件来导航. -->
+    <!-- 通过传入 `to` 属性指定链接. -->
+    <!-- <router-link> 默认会被渲染成一个 `<a>` 标签 -->
+			<router-link to="/foo">Foo</router-link>
+			<router-link to="/bar">Bar</router-link>
+			<router-link to="/user/hl/po/123">User</router-link>
+		
+		 <!-- 路由出口 -->
+  <!-- 路由匹配到的组件将渲染在这里 -->
+    	<transition name="fade" mode="out-in">
+			<router-view></router-view>
+		</transition>
+		<hr/>
+	</div>
+		
+</body>
+	<script type="text/javascript">
+		//定义（路由）组件。
+		const Foo={
+			mounted(){
+				console.log(this.$route)
+			},
+			template:"<div>this is foo</div>"
+
+		}
+		const Bar1={template:"<div>this is bar-1</div>"}
+		const Bar2={
+				template:`<div>this is bar-2
+								<button @click="handleuser">GOuser</button>
+							</div>`,
+				methods:{
+					handleuser(){
+						// $router 路由实例  也会把路由实例注入到 Vue.prototype.$router
+        	            		//this.$router.push('/user/xiaolong')//有历史记录的
+        	            		//this.$router.push({path:'/user/xiaolong'})
+        	            		// this.$router.push({name:'u', params: { userId: 'xiaofeng' }, query: { plan: 'private' }})
+						this.$router.push("/user/hl/po/123456789")
+					}
+				}
+
+			}
+		const Bar={template:`<div>
+									<router-link to="/bar/bar1">Bar-1</router-link>
+									<router-link to="/bar/bar2">Bar-2</router-link>
+									<hr/>
+									<transition name="fad" mode="out-in">
+										<router-view></router-view>
+									</transition>
+							</div>`}
+		const User={
+			mounted(){
+				console.log(this.$route)
+			},
+			watch:{
+				$route (to,form){
+					console.log(to)
+				}
+			},
+			template:`<div>
+							this is user--------
+							{{this.$route.params.userid}}
+							<button @click="handlefanhui">返回</button>
+					</div>`,
+			methods:{
+				handlefanhui(){
+					router.go(-1)
+				}
+			}
+		}
+		 //定义路由
+		
+		const routes=[
+			{path:'/foo',component:Foo},
+			{path:'/bar',component:Bar,
+
+				children:[
+					{path:'bar1',component:Bar1},
+					{path:'bar2',component:Bar2},
+					{path:'/',redirect:'bar2'}
+
+
+				]
+			
+				
+			},
+			{path:'/user/:userid/po/:post_id',component:User},
+			{path:'/',redirect:'/foo'}
+		]
+		// 创建 router 实例，然后传 `routes` 配置
+		const router=new VueRouter({
+			routes
+		})
+		router.beforeEach(function(to,foem,next){//全局守卫（全局钩子函数）
+			//next控制是否能切换的函数
+			next()
+		})
+		const app = new Vue({
+			el:"#app",
+			data:{
+
+			},
+			 //创建和挂载根实例。
+			router
+		})
+	</script>
+</html>

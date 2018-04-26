@@ -23,6 +23,7 @@
 			box-sizing: border-box;
 			float:left;
 			height:300px;
+			list-style: none;
 		}
 	</style>
 </head>
@@ -40,27 +41,53 @@
 
 
 	<script type="text/javascript">
-		var container = document.getElementById('container');
-		var lis = container.getElementsByTagName("li");
-		var liw = lis[0].offsetWidth;
-		var left = 0;
-		var n = 0;
-		var ex=0;
-		container.addEventListener("touchstart",function(e){
-			e.preventDefault();
-			var ex=e.changedTouches[0].pageX;
-			left=lis.offsetLeft;
-			console.log(left)
-			console.log(ex)
-		})
-		container.addEventListener("touchmove",function(e){
-			var dis  =e.changedTouches[0].pageX-ex;
-			container.style.left=left+dis+'px';
-		})
+		// var container = document.getElementById('container');
+		// var lis = container.getElementsByTagName("li");
+		// var liw = lis[0].offsetWidth;
+		// var left = 0;
+		// var n = 0;
+		// var ex=0;
+		// container.addEventListener("touchstart",function(e){
+		// 	e.preventDefault();
+		// 	var ex=e.changedTouches[0].pageX;
+		// 	left=lis.offsetLeft;
+		// 	console.log(left)
+		// 	console.log(ex)
+		// })
+		// container.addEventListener("touchmove",function(e){
+		// 	var dis  =e.changedTouches[0].pageX-ex;
+		// 	container.style.left=left+dis+'px';
+		// })
 		// container.addEventListener("touchend",function(e){
 		// 	n = Math.round(container.offsetLeft/liw);
 		// 	container.style.left = n*liw+'px';
 		// })
+	var box = document.getElementById("container")
+      var lis = box.getElementsByTagName("li")
+      var sw = lis[0].offsetWidth;
+      var left = 0;
+      var n = 0 
+
+      box.addEventListener("touchstart", function(e){
+        e.preventDefault();
+        ex = e.changedTouches[0].pageX;
+        left = box.offsetLeft;
+      })
+      box.addEventListener("touchmove", function(e){
+          var dis = e.changedTouches[0].pageX -ex;
+          box.style.left = left + dis + 'px'
+      })
+      box.addEventListener("touchend", function(){
+        n = Math.round(box.offsetLeft/sw)
+        // console.log(n) 
+        if(n==-4) {
+          n=-3
+        }
+        if(n==1) {
+          n=-0
+        }
+        box.style.left = sw*n + 'px'
+      })
 	</script>
 </body>
 </html>
